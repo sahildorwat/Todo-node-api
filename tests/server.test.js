@@ -5,9 +5,12 @@ const expect = require('expect');
 const {app} = require('../server/server');
 const {Todo} = require('../server/models/Todo');
 
+const insertArray = [ { text: 'test100'}, {text: 'test200'}]
 
 beforeEach((done) => {
-    Todo.remove({}).then(() => done());
+    Todo.remove({}).then(() => {
+        return Todo.insertMany(insertArray).then(() => done());
+    });
 });
 
 describe('POST /todos', ()=> {
@@ -25,7 +28,7 @@ describe('POST /todos', ()=> {
                 if(err) {
                     return done(err)
                 }
-                Todo.find().then( (todos) => {
+                Todo.find({text}).then( (todos) => {
                     expect(todos.length).toBe(1);
                     expect(todos[0].text).toBe(text);
                     done();
@@ -43,9 +46,23 @@ describe('POST /todos', ()=> {
                     return done(err);
                 } 
                 Todo.find().then((todos) => {
-                    expect(todos.length).toBe(0);
+                    expect(todos.length).toBe(2);
                     done();
                 }).catch((e) => done(e));
             });
     })
 });
+
+describe('get /todos', () => {
+
+    it('should return all todos', (done) => {
+        request(app)
+            .get('/todos')
+            .expect(200)
+            .expect((res)=> {
+                // console.log(res);
+                expect(res.body.length).toBe(2);
+            })
+            .end(done)
+    })
+})
