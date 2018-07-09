@@ -1,17 +1,35 @@
-var mongoose = require('mongoose');
+const express = require('express');
+const bodyParser = require('body-parser');
 
-mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/Todos');
+const {mongoose} = require('./db/mongoose');
+const {User} = require('./models/User');
+var {Todo} = require('./models/Todo');
 
+const app = express();
+app.listen(3000,()=> {console.log(`listening on port 3000` ) })
 
-const Todo = mongoose.model('Todo',{
-    text: { type: String },
-    completed: { type: Boolean },
-    completedAt: { type: Number } })
+app.use(bodyParser.json());
 
-// const newTodo = new Todo({ text: 'coock dinner' });
-const newTodo = new Todo({  text: 'tsting 123',
-                            completed: true, 
-                            completedAt: 8888888 })
+// app.post('/todos', (req, res) => {
+//     var todo = new Todo({ 
+//         text: req.body.text
+//     });
+//     todo.save().then( doc => res.send(doc),
+//         (e) => res.status(400).send(e));
+// })
 
-newTodo.save().then( docs => console.log(docs), err =>  console.log(err) )
+app.post('/todos', (req, res) => {
+    var todo = new Todo({
+      text: req.body.text
+    });
+  
+    todo.save().then((doc) => {
+      res.send(doc);
+    }, (e) => {
+      res.status(400).send(e);
+    });
+  });
+
+app.get('/',(req, res) => {
+    res.send( '<h1>Welcome </h1>')
+});
