@@ -90,37 +90,53 @@ const insertArray = [ { text: 'test100'}, {text: 'test200'}]
     // })
 // });
 
-describe('delete /todos/:id', () => {
-    it('should delete record from database', (done) => {
+// describe('delete /todos/:id', () => {
+//     it('should delete record from database', (done) => {
+//         request(app)
+//             .delete('/todos/5b43d8c43c9a17f575c12980')
+//             .expect(200)
+//             .expect((res) => {
+//                 console.log('res', res)
+//                 expect(res.body).toInclude({response: {text: 'test100'}})
+//             })
+//             .end( (err, result) => {
+//                 if(err) return done(err);
+
+//                 Todo.findById('5b43d8c43c9a17f575c12980').then( (res) => {
+//                     expect(res).toBe(null);
+//                     done();
+//                 }).catch(e => done(e));
+//             })
+//     })
+
+//     it('should return 404 ', (done) => {
+//         request(app)
+//             .delete('/todos/5b43c1d441be15f448cc10e5')
+//             .expect(404)
+//             .end(done)
+//     });
+
+//     it('should return 404 for invalid id ', (done) => {
+//         request(app)
+//             .delete('/todos/5b43c1d441be15fa448cc10e5')
+//             .expect(404)
+//             .end(done)
+//     })
+
+// })
+
+describe('patch /todos/:id', () => {
+    it('should update the todo', (done)=> {
         request(app)
-            .delete('/todos/5b43d8c43c9a17f575c12980')
+            .patch('/todos/5b43dfe83c9a17f575c12a08')
+            .send({"text": "testing manually" , "completed": true})
             .expect(200)
-            .expect((res) => {
-                console.log('res', res)
-                expect(res.body).toInclude({response: {text: 'test100'}})
+            .expect( (res) => {
+                // console.log(res.body);
+                expect(res.body.todo.completedAt).toBeA('number');
+                expect(res.body.todo.text).toBe('testing manually');
             })
-            .end( (err, result) => {
-                if(err) return done(err);
-
-                Todo.findById('5b43d8c43c9a17f575c12980').then( (res) => {
-                    expect(res).toBe(null);
-                    done();
-                }).catch(e => done(e));
-            })
-    })
-
-    it('should return 404 ', (done) => {
-        request(app)
-            .delete('/todos/5b43c1d441be15f448cc10e5')
-            .expect(404)
-            .end(done)
-    });
-
-    it('should return 404 for invalid id ', (done) => {
-        request(app)
-            .delete('/todos/5b43c1d441be15fa448cc10e5')
-            .expect(404)
-            .end(done)
+            .end(done);
     })
 
 })
