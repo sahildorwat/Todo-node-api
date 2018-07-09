@@ -1,3 +1,4 @@
+
 const express = require('express');
 const request = require('supertest');
 const expect = require('expect');
@@ -13,45 +14,45 @@ const insertArray = [ { text: 'test100'}, {text: 'test200'}]
 //     });
 // });
 
-// describe('POST /todos', ()=> {
-    // it('should create a new todo', (done)=> {
-    //     var text = 'Test todo next'
+describe('POST /todos', ()=> {
+    it('should create a new todo', (done)=> {
+        var text = 'Test todo next'
 
-    //     request(app)
-    //         .post('/todos')
-    //         .send({text})
-    //         .expect(200)
-    //         .expect((res) => {
-    //             expect(res.body.text).toBe(text)
-    //         })
-    //         .end((err, res) => {
-    //             if(err) {
-    //                 return done(err)
-    //             }
-    //             Todo.find({text}).then( (todos) => {
-    //                 expect(todos.length).toBe(1);
-    //                 expect(todos[0].text).toBe(text);
-    //                 done();
-    //             }).catch((e) => done(e));
-    //         });
-    // });
+        request(app)
+            .post('/todos')
+            .send({text})
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.text).toBe(text)
+            })
+            .end((err, res) => {
+                if(err) {
+                    return done(err)
+                }
+                Todo.find({text}).then( (todos) => {
+                    expect(todos.length).toBe(1);
+                    expect(todos[0].text).toBe(text);
+                    done();
+                }).catch((e) => done(e));
+            });
+    });
 
-//     it('should not create object in database', (done) => {
-//         request(app)
-//             .post('/todos')
-//             .send({text: ''})
-//             .expect(400)
-//             .end( (err, res) => {
-//                 if(err) {
-//                     return done(err);
-//                 } 
-//                 Todo.find().then((todos) => {
-//                     expect(todos.length).toBe(2);
-//                     done();
-//                 }).catch((e) => done(e));
-//             });
-//     })
-// });
+    it('should not create object in database', (done) => {
+        request(app)
+            .post('/todos')
+            .send({text: ''})
+            .expect(400)
+            .end( (err, res) => {
+                if(err) {
+                    return done(err);
+                } 
+                Todo.find().then((todos) => {
+                    expect(todos.length).toBe(2);
+                    done();
+                }).catch((e) => done(e));
+            });
+    })
+});
 
 // describe('get /todos', () => {
 //     it('should return all todos', (done) => {
@@ -125,18 +126,18 @@ const insertArray = [ { text: 'test100'}, {text: 'test200'}]
 
 // })
 
-describe('patch /todos/:id', () => {
-    it('should update the todo', (done)=> {
-        request(app)
-            .patch('/todos/5b43dfe83c9a17f575c12a08')
-            .send({"text": "testing manually" , "completed": true})
-            .expect(200)
-            .expect( (res) => {
-                // console.log(res.body);
-                expect(res.body.todo.completedAt).toBeA('number');
-                expect(res.body.todo.text).toBe('testing manually');
-            })
-            .end(done);
-    })
+// describe('patch /todos/:id', () => {
+//     it('should update the todo', (done)=> {
+//         request(app)
+//             .patch('/todos/5b43dfe83c9a17f575c12a08')
+//             .send({"text": "testing manually" , "completed": true})
+//             .expect(200)
+//             .expect( (res) => {
+//                 // console.log(res.body);
+//                 expect(res.body.todo.completedAt).toBeA('number');
+//                 expect(res.body.todo.text).toBe('testing manually');
+//             })
+//             .end(done);
+//     })
 
-})
+// })
