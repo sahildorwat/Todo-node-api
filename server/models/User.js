@@ -83,6 +83,25 @@ UserSchema.pre('save', function(next) {
   
 })
 
+UserSchema.statics.findByCredentials = function(email, password) {
+  const User = this;
+  return User.findOne({email}).then((user) => {
+    if(!user) {
+      return Promise.reject();
+    }
+
+    return new Promise((resolve, reject) => {
+      bcrypt.compare(password, user.password,
+          (err, suc) => { 
+            if(err) {
+               reject();
+            }
+             resolve(user);
+          });
+    });
+  });
+} 
+
 var User = mongoose.model('User', UserSchema);
 
 module.exports = {User}
