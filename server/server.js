@@ -25,14 +25,18 @@ app.listen(3000,()=> {console.log(`listening on port ${port}` ) })
 
 app.use(bodyParser.json());
 
-// app.post('/todos', (req, res) => {
-//     var todo = new Todo({ 
-//         text: req.body.text
-//     });
-//     todo.save().then( doc => res.send(doc),
-//         (e) => res.status(400).send(e));
-// })
-
+app.post('/users', (req, res) => {
+    const body = _.pick(req.body, ['email', 'password']);
+    const user = new User(body);
+    // console.log(user)
+    user.save().then( () => {
+        return user.generateAuthToken()})
+    .then( (token) => res.header('x-auth', token).send(user))
+    .catch( e => {
+        console.log(e);
+        res.status(400).send(e)});
+    
+})
 app.post('/todos', (req, res) => {
     var todo = new Todo({
       text: req.body.text
