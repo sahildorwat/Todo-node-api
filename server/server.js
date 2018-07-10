@@ -18,12 +18,17 @@ const _= require('lodash');
 const {mongoose} = require('./db/mongoose');
 const {User} = require('./models/User');
 var {Todo} = require('./models/Todo');
-
+const {authenticate} = require('./middleware/authenticate')
 const port = process.env.PORT;
 const app = express();
 app.listen(3000,()=> {console.log(`listening on port ${port}` ) })
 
 app.use(bodyParser.json());
+
+
+app.get('/users/me', authenticate,(req, res) => {
+   res.send(req.user)
+})
 
 app.post('/users', (req, res) => {
     const body = _.pick(req.body, ['email', 'password']);
